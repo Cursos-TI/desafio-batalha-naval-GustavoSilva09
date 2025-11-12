@@ -20,6 +20,8 @@ int main() {
     // Vetores representando os navios (3 = parte do navio)
     int navioH[3] = {3, 3, 3}; // Navio horizontal
     int navioV[3] = {3, 3, 3}; // Navio vertical
+    int navioDiagonal1[3] = {3, 3, 3}; // Navio diagonal 1
+    int navioDiagonal2[3] = {3, 3, 3}; // Navio diagonal 2
 
     // Posição inicial para o navio horizontal
     int linhaInicioH = 2; // 3ª linha (índice 2)
@@ -28,6 +30,14 @@ int main() {
     // Posição inicial para o navio vertical
     int linhaInicioV = 5; // 6ª linha (índice 5)
     int colunaInicioV = 7; // 8ª coluna (índice 7)
+
+    // Posição inicial para o navio diagonal 1
+    int linhaInicioD1 = 2; // 3ª linha (índice 2)
+    int colunaInicioD1 = 1; // 2ª coluna (índice 1)
+    
+    // Posição inicial para o navio diagonal 2
+    int linhaInicioD2 = 6; // 7ª linha (índice 6)
+    int colunaInicioD2 = 5; // 6ª coluna (índice 5) 
 
     // Verificação se navio horizontal cabe na matriz 
     if (colunaInicioH + tamanhoNavios > tamanhoMatriz) {
@@ -67,16 +77,55 @@ int main() {
         tabuleiro[linhaInicioV + i][colunaInicioV] = navioV[i];
     }
 
+    // Verificação se navio diagonal 1 cabe na matriz 
+    if (linhaInicioD1 + tamanhoNavios > tamanhoMatriz || colunaInicioD1 + tamanhoNavios > tamanhoMatriz) {
+        printf("Erro: Navio diagonal não cabe na matriz!\n");
+        return 1;
+    }
+
+    // Verificação de sobreposição navio diagonal 1 (simples) 
+    for (i = 0; i < tamanhoNavios; i++) {
+        if (tabuleiro[linhaInicioD1 + i][colunaInicioD1 + i] != agua) {
+            printf("Erro: Sobreposição de navios na posição diagonal!\n");
+            return 1;
+        }
+    }
+
+    // Coloca o navio diagonal 1 na matriz 
+    for (i = 0; i < 3; i++) {
+        tabuleiro[linhaInicioD1 + i][colunaInicioD1 + i] = navioDiagonal1[i];
+    }
+
+    // Verificação se navio diagonal 2 cabe na matriz
+    if (linhaInicioD2 + tamanhoNavios > tamanhoMatriz || colunaInicioD2 - tamanhoNavios < 0) {
+    printf("Erro: Navio diagonal 2 não cabe na matriz!\n");
+    return 1;
+    }
+
+    // Verificação de sobreposição navio diagonal 2 
+    for (i = 0; i < tamanhoNavios; i++) {
+        if (tabuleiro[linhaInicioD2 + i][colunaInicioD2 - i] != agua) {
+            printf("Erro: Sobreposição de navios na posição diagonal 2!\n");
+            return 1;
+    }
+    }
+
+    // Coloca o navio diagonal 2 na matriz 
+    for (i = 0; i < tamanhoNavios; i++) {
+        tabuleiro[linhaInicioD2 + i][colunaInicioD2 - i] = navioDiagonal2[i];
+    }
+
+
     // Vetores para rótulos de coordenadas
     char letras[10] = {'A','B','C','D','E','F','G','H','I','J'};
     int numeros[10] = {1,2,3,4,5,6,7,8,9,10};
 
 
-    printf("   TABULEIRO BATALHA NAVAL\n");
+    printf("      TABULEIRO BATALHA NAVAL\n");
     // Cabeçalho de letras (colunas)
     printf("    ");
     for (i = 0; i < 10; i++) {
-        printf("%c ", letras[i]);
+        printf(" %c ", letras[i]);
     }
     printf("\n");
 
@@ -84,7 +133,7 @@ int main() {
     for (i = 0; i < 10; i++) {
         printf("%2d  ", numeros[i]);  // número da linha
         for (j = 0; j < 10; j++) {
-            printf("%d ", tabuleiro[i][j]);
+            printf(" %d ", tabuleiro[i][j]);
         }
         printf("\n");
     }
